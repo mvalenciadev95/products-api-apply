@@ -15,7 +15,9 @@ export class ContentfulScheduler {
       await this.contentfulService.fetchAndSyncProducts();
       this.logger.log('Scheduled Contentful sync completed');
     } catch (error) {
-      this.logger.error(`Scheduled Contentful sync failed: ${error.message}`);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Scheduled Contentful sync failed: ${errorMessage}`);
     }
   }
 }

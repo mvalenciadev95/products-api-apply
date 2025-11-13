@@ -49,13 +49,14 @@ export class ProductsService {
     }
 
     if (minPrice !== undefined || maxPrice !== undefined) {
-      filter.price = {};
+      const priceFilter: { $gte?: number; $lte?: number } = {};
       if (minPrice !== undefined) {
-        filter.price.$gte = minPrice;
+        priceFilter.$gte = minPrice;
       }
       if (maxPrice !== undefined) {
-        filter.price.$lte = maxPrice;
+        priceFilter.$lte = maxPrice;
       }
+      filter.price = priceFilter;
     }
 
     const [data, total] = await Promise.all([
@@ -94,7 +95,9 @@ export class ProductsService {
     await product.save();
   }
 
-  async findAllForReports(filter?: FilterQuery<ProductDocument>): Promise<ProductDocument[]> {
+  async findAllForReports(
+    filter?: FilterQuery<ProductDocument>,
+  ): Promise<ProductDocument[]> {
     return this.productModel.find(filter || {}).exec();
   }
 
