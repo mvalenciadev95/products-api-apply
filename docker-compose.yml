@@ -1,0 +1,43 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: product-api-apply-mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: product-api-db
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - product-api-apply-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product-api-apply
+    restart: unless-stopped
+    ports:
+      - '4000:3000'
+    environment:
+      PORT: 3000
+      NODE_ENV: test
+      MONGODB_URI: mongodb://mongodb:27017/product-api-db
+      CONTENTFUL_SPACE_ID: ${CONTENTFUL_SPACE_ID:-9xs1613l9f7v}
+      CONTENTFUL_ACCESS_TOKEN: ${CONTENTFUL_ACCESS_TOKEN:-I-ThsT55eE_B3sCUWEQyDT4VqVO3x__20ufuie9usns}
+      CONTENTFUL_ENVIRONMENT: ${CONTENTFUL_ENVIRONMENT:-master}
+      CONTENTFUL_CONTENT_TYPE: ${CONTENTFUL_CONTENT_TYPE:-product}
+      JWT_SECRET: ${JWT_SECRET:-df67f8636d95c1e73d596a83dd7c8b19}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
+    depends_on:
+      - mongodb
+    networks:
+      - product-api-apply-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  product-api-apply-network:
+    driver: bridge
