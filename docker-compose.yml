@@ -6,7 +6,7 @@ services:
     ports:
       - '27017:27017'
     environment:
-      MONGO_INITDB_DATABASE: product-api
+      MONGO_INITDB_DATABASE: product-api-db
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -23,7 +23,7 @@ services:
     environment:
       PORT: 3000
       NODE_ENV: test
-      MONGODB_URI: mongodb://mongodb:27017/product-api
+      MONGODB_URI: mongodb://mongodb:27017/product-api-db
       CONTENTFUL_SPACE_ID: ${CONTENTFUL_SPACE_ID:-9xs1613l9f7v}
       CONTENTFUL_ACCESS_TOKEN: ${CONTENTFUL_ACCESS_TOKEN:-I-ThsT55eE_B3sCUWEQyDT4VqVO3x__20ufuie9usns}
       CONTENTFUL_ENVIRONMENT: ${CONTENTFUL_ENVIRONMENT:-master}
@@ -39,5 +39,5 @@ volumes:
   mongodb_data:
 
 networks:
-  product-api-test-network:
+  product-api-apply-network:
     driver: bridge
