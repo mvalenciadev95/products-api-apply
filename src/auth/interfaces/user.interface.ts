@@ -8,4 +8,3 @@ export interface UserWithoutPassword {
   userId: number;
   username: string;
 }
-

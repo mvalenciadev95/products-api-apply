@@ -6,4 +6,3 @@ export interface ContentfulProductFields {
   price?: number;
   [key: string]: unknown;
 }
-

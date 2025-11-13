@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let jwtService: JwtService;
 
   const mockJwtService = {
     sign: jest.fn().mockReturnValue('mock-jwt-token'),
@@ -32,7 +31,6 @@ describe('AuthService', () => {
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    jwtService = module.get<JwtService>(JwtService);
   });
 
   it('should be defined', () => {
@@ -59,7 +57,7 @@ describe('AuthService', () => {
       const result = service.login(loginDto);
 
       expect(result).toHaveProperty('access_token');
-      expect(jwtService.sign).toHaveBeenCalled();
+      expect(mockJwtService.sign).toHaveBeenCalled();
     });
 
     it('should throw UnauthorizedException for invalid credentials', () => {

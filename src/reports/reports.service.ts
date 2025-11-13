@@ -35,13 +35,14 @@ export class ReportsService {
     }
 
     if (startDate || endDate) {
-      filter.createdAt = {};
+      const dateFilter: { $gte?: Date; $lte?: Date } = {};
       if (startDate) {
-        filter.createdAt.$gte = new Date(startDate);
+        dateFilter.$gte = new Date(startDate);
       }
       if (endDate) {
-        filter.createdAt.$lte = new Date(endDate);
+        dateFilter.$lte = new Date(endDate);
       }
+      filter.createdAt = dateFilter;
     }
 
     const [total, matching] = await Promise.all([

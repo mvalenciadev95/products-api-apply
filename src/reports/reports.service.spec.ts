@@ -4,7 +4,6 @@ import { ProductsService } from '../products/products.service';
 
 describe('ReportsService', () => {
   let service: ReportsService;
-  let productsService: ProductsService;
 
   const mockProductsService = {
     count: jest.fn(),
@@ -23,7 +22,6 @@ describe('ReportsService', () => {
     }).compile();
 
     service = module.get<ReportsService>(ReportsService);
-    productsService = module.get<ProductsService>(ProductsService);
   });
 
   it('should be defined', () => {
@@ -59,7 +57,7 @@ describe('ReportsService', () => {
         { category: 'Electronics' },
         { category: 'Clothing' },
         { category: null },
-      ] as any;
+      ] as Array<{ category: string | null }>;
 
       mockProductsService.findAllForReports.mockResolvedValue(mockProducts);
 

@@ -6,7 +6,6 @@ import { Product, ProductDocument } from './schemas/product.schema';
 
 describe('ProductsService', () => {
   let service: ProductsService;
-  let model: Model<ProductDocument>;
 
   const mockProduct: Partial<ProductDocument> = {
     _id: '507f1f77bcf86cd799439011' as unknown,
@@ -68,7 +67,6 @@ describe('ProductsService', () => {
     }).compile();
 
     service = module.get<ProductsService>(ProductsService);
-    model = module.get<Model<ProductDocument>>(getModelToken(Product.name));
   });
 
   it('should be defined', () => {
@@ -85,7 +83,7 @@ describe('ProductsService', () => {
       };
 
       const result = await service.create(createProductDto);
-      
+
       expect(result).toEqual({
         _id: '507f1f77bcf86cd799439011',
         contentfulId: 'test-id',
