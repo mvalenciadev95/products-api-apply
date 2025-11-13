@@ -11,7 +11,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @ApiTags('contentful')
 @Controller('contentful')
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
 export class ContentfulController {
   constructor(private readonly contentfulService: ContentfulService) {}
 
