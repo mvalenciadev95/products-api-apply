@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { FilterQuery } from 'mongoose';
 import { ProductsService } from '../products/products.service';
+import { ProductDocument } from '../products/schemas/product.schema';
 
 @Injectable()
 export class ReportsService {
@@ -20,7 +22,7 @@ export class ReportsService {
     startDate?: string,
     endDate?: string,
   ): Promise<{ percentage: number }> {
-    const filter: any = { deleted: false };
+    const filter: FilterQuery<ProductDocument> = { deleted: false };
 
     if (hasPrice) {
       filter.price = { $exists: true, $ne: null, $gt: 0 };

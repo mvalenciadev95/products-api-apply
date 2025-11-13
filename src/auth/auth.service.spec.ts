@@ -40,34 +40,32 @@ describe('AuthService', () => {
   });
 
   describe('validateUser', () => {
-    it('should return user if credentials are valid', async () => {
-      const result = await service.validateUser('admin', 'admin123');
+    it('should return user if credentials are valid', () => {
+      const result = service.validateUser('admin', 'admin123');
       expect(result).toBeDefined();
-      expect(result.username).toBe('admin');
-      expect(result.password).toBeUndefined();
+      expect(result?.username).toBe('admin');
+      expect(result).not.toHaveProperty('password');
     });
 
-    it('should return null if credentials are invalid', async () => {
-      const result = await service.validateUser('admin', 'wrong-password');
+    it('should return null if credentials are invalid', () => {
+      const result = service.validateUser('admin', 'wrong-password');
       expect(result).toBeNull();
     });
   });
 
   describe('login', () => {
-    it('should return access token for valid credentials', async () => {
+    it('should return access token for valid credentials', () => {
       const loginDto = { username: 'admin', password: 'admin123' };
-      const result = await service.login(loginDto);
+      const result = service.login(loginDto);
 
       expect(result).toHaveProperty('access_token');
       expect(jwtService.sign).toHaveBeenCalled();
     });
 
-    it('should throw UnauthorizedException for invalid credentials', async () => {
+    it('should throw UnauthorizedException for invalid credentials', () => {
       const loginDto = { username: 'admin', password: 'wrong-password' };
 
-      await expect(service.login(loginDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      expect(() => service.login(loginDto)).toThrow(UnauthorizedException);
     });
   });
 });

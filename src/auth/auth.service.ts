@@ -24,13 +24,14 @@ export class AuthService {
       (u) => u.username === username && u.password === password,
     );
     if (user) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: _password, ...result } = user;
       return result;
     }
     return null;
   }
 
-  async login(loginDto: LoginDto) {
+  login(loginDto: LoginDto) {
     const user = this.validateUser(loginDto.username, loginDto.password);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
