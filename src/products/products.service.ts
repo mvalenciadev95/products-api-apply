@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, FilterQuery } from 'mongoose';
 import { Product, ProductDocument } from './schemas/product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FilterProductDto } from './dto/filter-product.dto';
@@ -38,7 +38,7 @@ export class ProductsService {
     } = filterDto;
     const skip = (page - 1) * limit;
 
-    const filter: any = { deleted: false };
+    const filter: FilterQuery<ProductDocument> = { deleted: false };
 
     if (name) {
       filter.name = { $regex: name, $options: 'i' };
@@ -94,11 +94,11 @@ export class ProductsService {
     await product.save();
   }
 
-  async findAllForReports(filter?: any): Promise<ProductDocument[]> {
+  async findAllForReports(filter?: FilterQuery<ProductDocument>): Promise<ProductDocument[]> {
     return this.productModel.find(filter || {}).exec();
   }
 
-  async count(filter?: any): Promise<number> {
+  async count(filter?: FilterQuery<ProductDocument>): Promise<number> {
     return this.productModel.countDocuments(filter || {}).exec();
   }
 }
