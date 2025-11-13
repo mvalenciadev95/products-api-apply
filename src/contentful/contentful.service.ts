@@ -29,6 +29,16 @@ export class ContentfulService {
   }
 
   async fetchAndSyncProducts(): Promise<void> {
+    const spaceId = this.configService.get<string>('contentful.spaceId');
+    const accessToken = this.configService.get<string>(
+      'contentful.accessToken',
+    );
+
+    if (!spaceId || !accessToken) {
+      this.logger.warn('Contentful credentials not configured. Skipping sync.');
+      return;
+    }
+
     try {
       this.logger.log('Starting Contentful products sync...');
 
@@ -65,13 +75,25 @@ export class ContentfulService {
 
       this.logger.log('Contentful products sync completed successfully');
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      const errorStack = error instanceof Error ? error.stack : undefined;
-      this.logger.error(
-        `Error syncing Contentful products: ${errorMessage}`,
-        errorStack,
-      );
+      let errorMessage = 'Unknown error';
+      if (error && typeof error === 'object' && 'status' in error) {
+        const statusError = error as { status: number; message?: string };
+        if (statusError.status === 404) {
+          errorMessage =
+            'Contentful space not found. Please check your CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN.';
+        } else if (statusError.status === 401) {
+          errorMessage =
+            'Contentful authentication failed. Please check your CONTENTFUL_ACCESS_TOKEN.';
+        } else {
+          errorMessage =
+            statusError.message ||
+            `Contentful API error (${statusError.status})`;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      this.logger.error(`Error syncing Contentful products: ${errorMessage}`);
       throw error;
     }
   }

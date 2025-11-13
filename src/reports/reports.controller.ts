@@ -19,7 +19,7 @@ import { ReportFilterDto } from './dto/report-filter.dto';
 @ApiTags('reports')
 @Controller('reports')
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
